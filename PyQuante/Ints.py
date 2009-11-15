@@ -10,6 +10,8 @@
  distribution. 
 """
 
+import logging
+
 from CGBF import CGBF,coulomb
 from NumWrap import zeros,dot,reshape
 from PyQuante.cints import ijkl2intindex as intindex
@@ -78,7 +80,9 @@ def get1ints(bfs,atoms):
     S = zeros((nbf,nbf),'d')
     h = zeros((nbf,nbf),'d')
 
+    logging.info("calculating the 1 integrals matrix (%d x %d)" % (nbf, nbf))
     for i in range(nbf):
+        logging.debug("calculating row: %d/%d" % (i, nbf))
         bfi = bfs[i]
         for j in range(nbf):
             bfj = bfs[j]
@@ -132,8 +136,12 @@ def get2ints(bfs):
     nbf = len(bfs)
     totlen = nbf*(nbf+1)*(nbf*nbf+nbf+2)/8
     Ints = array('d',[0]*totlen)
+    logging.info("calculating the 2 integrals (nbf=%d, totlen=%d)" \
+            % (nbf, totlen))
     for i in xrange(nbf):
+        logging.debug("calculating i=%d (nbf=%d)" % (i, nbf))
         for j in xrange(i+1):
+            logging.debug("calculating j=%d (i=%d)" % (j, i))
             ij = i*(i+1)/2+j
             for k in xrange(nbf):
                 for l in xrange(k+1):
