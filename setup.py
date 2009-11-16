@@ -28,6 +28,7 @@ Operating System :: MacOS
 """
 
 from distutils.core import setup, Extension
+from Cython.Distutils import build_ext
 import distutils.sysconfig
 sysconfig = distutils.sysconfig.get_config_vars()
 import os, sys, glob, stat
@@ -55,7 +56,12 @@ setup(name="PyQuante",
       platforms = ["any"],
       classifiers = filter(None,classifiers.split("\n")),
       packages = ['PyQuante','PyQuante.Basis','PyQuante.IO'],
-      ext_modules=[Extension("PyQuante.cints",["Src/cints.c"],libraries=libs),
-                   Extension("PyQuante.chgp",["Src/chgp.c"],libraries=libs),
-                   Extension("PyQuante.crys",["Src/crys.c"],libraries=libs)],
+      cmdclass = {'build_ext': build_ext},
+      ext_modules=[
+          Extension("PyQuante.cints",["Src/cints.c"],libraries=libs),
+          Extension("PyQuante.chgp",["Src/chgp.c"],libraries=libs),
+          Extension("PyQuante.crys",["Src/crys.c"],libraries=libs),
+          Extension("PyQuante.chgp_cython", ["Src/chgp_cython.pyx",
+              "Src/chgp.c"], libraries=libs),
+          ],
       )
