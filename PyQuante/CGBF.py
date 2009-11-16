@@ -20,7 +20,8 @@ from NumWrap import zeros
 from math import sqrt
 
 from PyQuante.cints import overlap
-from PyQuante.chgp import contr_coulomb
+#from PyQuante.chgp import contr_coulomb
+from PyQuante.chgp_cython import contr_coulomb
 
 class CGBF:
     "Class for a contracted Gaussian basis function"
@@ -196,13 +197,10 @@ class CGBF:
 def coulomb(a,b,c,d):
     "Coulomb interaction between 4 contracted Gaussians"
 
-    try:
-        Jij = contr_coulomb(a.exps(),a.coefs(),a.pnorms(),a.origin(),a.powers(),
-                            b.exps(),b.coefs(),b.pnorms(),b.origin(),b.powers(),
-                            c.exps(),c.coefs(),c.pnorms(),c.origin(),c.powers(),
-                            d.exps(),d.coefs(),d.pnorms(),d.origin(),d.powers())
-    except:
-        raise Exception("Two-electron integral failed")
+    Jij = contr_coulomb(a.exps(),a.coefs(),a.pnorms(),a.origin(),a.powers(),
+                        b.exps(),b.coefs(),b.pnorms(),b.origin(),b.powers(),
+                        c.exps(),c.coefs(),c.pnorms(),c.origin(),c.powers(),
+                        d.exps(),d.coefs(),d.pnorms(),d.origin(),d.powers())
     return a.norm()*b.norm()*c.norm()*d.norm()*Jij
 
 def three_center(a,b,c):
